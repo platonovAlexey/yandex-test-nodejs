@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Тестовое задание для Школы Node.JS</title>
+	<style>
+		.myForm{
+			max-width: 500px;
+			margin: 0 auto;
+			border: 1px solid #000;
+			padding: 20px;
+			box-shadow: 1px 1px 5px rgba(0,0,0,.5);
+		}
+		input {
+			border: 1px solid black;
+			padding: 10px;
+		}
+		input.error {
+			border: 1px solid red;
+		}
+	</style>
+</head>
+<body>
+	<form id="myForm" action="success.json" class="myForm">
+		<div id="resultContainer"></div>
+		<legend>Тестовое задание для школы NODE.JS</legend>
+		<p>
+			<label for="fio">ФИО: </label>
+			<br>
+			<input type="text" id="fio" name="fio" placeholder="фио"/></p>
+		<p>
+			<label for="email">Email: </label>
+			<br>
+			<input type="email" id="email" name="email" placeholder="email"/>
+		</p>
+		<p>
+			<label for="phone">Телефон: </label>
+			<br>
+			<input type="tel" id="phone" name="phone" placeholder="телефон"/>
+		</p>
+		<button id="submitButton">Отправить</button>
+	</form>
+	<script src="index.js"></script>
+</body>
+</html>
