@@ -1,4 +1,12 @@
-class MyForm {
+class Form {
+	constructor() {
+		document.getElementById('myForm').addEventListener('submit', this.submit.bind(this));
+		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+		this.setData = this.setData.bind(this);
+		this.getData = this.getData.bind(this);
+	}
+	
 	validate() {
 		let errorFields = [];
 		let isValid = true;
@@ -49,7 +57,7 @@ class MyForm {
 			isValid: isValid
 		};
 	}
-	
+
 	getData() {
 		return [].reduce.call(document.getElementById('myForm').elements, (data, element) => {
 			let isValidElement = (el) => {
@@ -75,7 +83,63 @@ class MyForm {
 			}
 		}
 	}
-	submit(){}
+
+	submit(event){
+		if (typeof event !== 'undefined') {
+			event.preventDefault();
+		}
+
+		let resultValidation = this.validate();
+		const resultContainer = document.getElementById('resultContainer');
+		const submitButton = document.getElementById('submitButton');
+
+		for (let input of document.getElementsByTagName('input')) {
+			input.classList.remove('error');
+		}
+
+		resultContainer.className = '';
+		resultContainer.innerHTML = '';
+
+		if (resultValidation.isValid) {
+			submitButton.disabled = true;
+
+			let fetchJSONFile = () => {
+				const xhr = new XMLHttpRequest();
+
+				xhr.open('GET', document.getElementById('myForm').action, false);
+				xhr.send();
+				const successStatusCode = 200;
+				const completeCode = 4;
+
+				if (xhr.readyState === completeCode) {
+					if (xhr.status === successStatusCode) {
+						let data = JSON.parse(xhr.responseText);
+
+						if (data.status === 'success') {
+							resultContainer.className = 'success';
+							resultContainer.innerHTML = 'Success';
+						} else if (data.status === 'error') {
+							resultContainer.className = 'error';
+							resultContainer.innerHTML = data.reason;
+						} else if (data.status === 'progress') {
+							resultContainer.className = 'progress';
+							setTimeout(() => {
+								fetchJSONFile();
+							}, data.timeout);
+						}
+					}
+				}
+			};
+
+			fetchJSONFile();
+
+		} else {
+			for (let value of resultValidation.errorFields) {
+				document.getElementById(value).className = 'error';
+			}
+		}
+	}
+
 }
 
-const MyForm = new MyForm();
+const MyForm = new Form();
