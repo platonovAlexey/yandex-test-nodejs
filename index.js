@@ -49,8 +49,32 @@ class MyForm {
 			isValid: isValid
 		};
 	}
-	getData(){}
-	setData(data){}
+	
+	getData() {
+		return [].reduce.call(document.getElementById('myForm').elements, (data, element) => {
+			let isValidElement = (el) => {
+				return el.name === el.type;
+			};
+
+			if (isValidElement(element)) {
+				data[element.name] = element.value;
+			}
+
+			return data;
+		}, {});
+	}
+
+	setData(data) {
+		const form = document.getElementById('myForm');
+
+		for (let [key, value] of Object.entries(data)) {
+			if (key === 'phone' || key === 'email' || key === 'fio') {
+				if (form.elements[key]) {
+					form.elements[key].value = value;
+				}
+			}
+		}
+	}
 	submit(){}
 }
 
